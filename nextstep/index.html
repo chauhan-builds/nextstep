@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>NextStep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Caveat:wght@600&family=Hind:wght@400;500;600&display=swap">
+<style>
+/* Layout: ruled-notebook page. Hero = headline left + animated staircase right, exam ticker,
+   syllabus explorer, three rising steps, margin-ruled feature list, then a dashboard view. */
+:root{
+  --bg:#E7F6F0; --paper:#F6FCF9; --ink:#0A3A3C; --muted:#3F6366; --line:#BFE3D6;
+  --accent:#C2410C; --on-accent:#FFFFFF; --hi:#FFC53D; --on-hi:#0A3A3C;
+  --mint:#0F9D6E; --on-mint:#04261F; --sky:#1F6FA8; --on-sky:#FFFFFF;
+  --stroke:#0A3A3C; --mark:#FFC53D;
+  --btn-bg:var(--ink); --btn-fg:var(--bg);
+  --gut:clamp(16px,4vw,40px);
+  --font-display:'Baloo 2','Noto Sans Devanagari',system-ui,sans-serif;
+  --font-body:'Hind','Noto Sans Devanagari',system-ui,sans-serif;
+  --font-hand:'Caveat','Baloo 2',cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#06201F; --paper:#0C2F2E; --ink:#E6F7F1; --muted:#9CC4BC; --line:#164544;
+    --accent:#FF8A4C; --on-accent:#06201F; --hi:#FFC53D; --on-hi:#0A3A3C;
+    --mint:#3DDC9F; --on-mint:#04261F; --sky:#5CB8F0; --on-sky:#06201F;
+    --stroke:#5FA79D; --mark:#8A3A0C; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#06201F; --paper:#0C2F2E; --ink:#E6F7F1; --muted:#9CC4BC; --line:#164544;
+  --accent:#FF8A4C; --on-accent:#06201F; --hi:#FFC53D; --on-hi:#0A3A3C;
+  --mint:#3DDC9F; --on-mint:#04261F; --sky:#5CB8F0; --on-sky:#06201F;
+  --stroke:#5FA79D; --mark:#8A3A0C; color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  font-family:var(--font-body);font-size:17px;line-height:1.6;color:var(--ink);
+  background-color:var(--bg);
+  background-image:repeating-linear-gradient(to bottom,transparent 0 33px,var(--line) 33px 34px);
+  padding-inline:var(--gut);
+}
+body.lock{overflow:hidden}
+.wrap{max-width:1120px;margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800;line-height:1.2}
+h3{font-size:1.2rem;font-weight:700;line-height:1.3}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+select,input,textarea{
+  font:inherit;color:var(--ink);background:var(--paper);
+  border:1.5px solid var(--stroke);border-radius:10px;padding:.55rem .75rem;min-width:0;max-width:100%;
+}
+textarea{width:100%;resize:vertical;line-height:1.5}
+::placeholder{color:var(--muted);opacity:.85}
+
+/* header */
+.top{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
+  margin-inline:calc(var(--gut) * -1);padding:10px var(--gut);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  background:var(--bg);background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1.5px solid var(--line);
+}
+.logo{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:1.45rem;line-height:1}
+.logo b{background:var(--mark);padding:0 .18em;border-radius:4px;font-weight:800}
+.logo svg{width:30px;height:30px;flex:none}
+.navlinks{display:flex;gap:6px;margin-left:12px}
+.navlinks a{text-decoration:none;font-family:var(--font-display);font-weight:600;padding:.3rem .7rem;border-radius:999px}
+.navlinks a:hover{background:var(--line)}
+.navright{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#navAuth{display:inline-flex;gap:8px}
+.icon-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:40px;height:40px;padding:0 .7rem;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:999px;font-family:var(--font-display);font-weight:700;
+}
+.icon-btn svg{width:20px;height:20px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  font-family:var(--font-display);font-weight:700;font-size:1.05rem;line-height:1.2;
+  padding:.7rem 1.35rem;border-radius:999px;border:2px solid var(--stroke);
+  background:var(--paper);color:var(--ink);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.btn.primary{background:var(--accent);color:var(--on-accent);box-shadow:4px 4px 0 var(--stroke)}
+.btn.primary:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--stroke)}
+.btn.primary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--stroke)}
+.btn.ghost:hover{background:var(--line)}
+.btn.dark{background:var(--btn-bg);color:var(--btn-fg)}
+.btn.small{font-size:.92rem;padding:.4rem .9rem}
+.btn.small.primary{box-shadow:3px 3px 0 var(--stroke)}
+
+/* hero */
+.hero{
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(24px,5vw,64px);align-items:center;padding-block:clamp(28px,6vw,72px);
+}
+.eyebrow{
+  display:inline-block;font-family:var(--font-hand);font-size:1.5rem;line-height:1;color:var(--accent);
+  transform:rotate(-2deg);margin-bottom:.4rem;
+}
+:root[data-theme="dark"] .eyebrow{color:var(--accent)}
+.hero h1{font-size:clamp(2.2rem,5.6vw,4.1rem);font-weight:800;line-height:1.18}
+mark{
+  color:var(--ink);padding:0 .14em;border-radius:6px;
+  background:linear-gradient(var(--mark),var(--mark)) no-repeat 0 50%/0% 100%;
+  animation:hl 1.1s .5s cubic-bezier(.6,.1,.2,1) forwards;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+}
+@keyframes hl{to{background-size:100% 100%}}
+.lead{font-size:1.15rem;color:var(--muted);max-width:34em;margin-top:1.1rem}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:1.6rem}
+.pathline{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.6rem}
+.pathline span{
+  font-family:var(--font-display);font-weight:600;font-size:.9rem;padding:.15rem .7rem;
+  border:1.5px solid var(--stroke);border-radius:8px;background:var(--paper);
+}
+.hero-art{position:relative;width:100%;max-width:470px;margin-inline:auto}
+.hero-art svg{display:block;width:100%;height:auto;position:relative;z-index:1}
+.sym{
+  position:absolute;z-index:0;font-family:var(--font-hand);font-size:1.7rem;color:var(--muted);
+  animation:floaty 7s ease-in-out infinite;animation-delay:calc(var(--d) * -1s);pointer-events:none;
+}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+.stair{animation:stepUp .75s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--i) * .13s)}
+@keyframes stepUp{from{transform:translateY(46px);opacity:0}to{transform:none;opacity:1}}
+.ball{animation:climb 9s ease-in-out 1.4s infinite backwards;transform:translate(371px,59px)}
+@keyframes climb{
+  0%,10%{transform:translate(51px,267px);opacity:1}
+  18%,28%{transform:translate(131px,215px)}
+  36%,46%{transform:translate(211px,163px)}
+  54%,64%{transform:translate(291px,111px)}
+  72%,88%{transform:translate(371px,59px);opacity:1}
+  95%{transform:translate(371px,59px);opacity:0}
+  100%{transform:translate(51px,267px);opacity:0}
+}
+.flag{transform-box:fill-box;transform-origin:left center;animation:wave 1.6s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:scaleX(1) skewY(0)}50%{transform:scaleX(.82) skewY(6deg)}}
+.stair-t{font-family:var(--font-display);font-weight:700;font-size:13px;text-anchor:middle}
+.hand-t{font-family:var(--font-hand);font-size:22px;fill:var(--ink)}
+
+/* ticker */
+.ticker{
+  margin-inline:calc(var(--gut) * -1);overflow:hidden;background:var(--ink);color:var(--bg);
+  border-block:2px solid var(--stroke);padding-block:.55rem;
+}
+.ticker-track{display:flex;width:max-content;animation:scrollx 46s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span{font-family:var(--font-display);font-weight:700;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;padding-inline:1.3rem;white-space:nowrap}
+.ticker span::after{content:"/";margin-left:2.6rem;opacity:.45}
+@keyframes scrollx{to{transform:translateX(-50%)}}
+
+/* sections */
+section.block{padding-block:clamp(40px,7vw,88px)}
+.sec-head{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.8rem;max-width:40rem}
+.sec-head p{color:var(--muted)}
+
+/* explorer */
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{
+  font-family:var(--font-display);font-weight:700;padding:.4rem 1rem;background:transparent;
+  border:2px solid var(--stroke);border-radius:999px;
+}
+.tab.on{background:var(--btn-bg);color:var(--btn-fg)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pill{
+  font-family:var(--font-display);font-weight:600;font-size:.95rem;padding:.25rem .8rem;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:8px;
+  transition:transform .12s ease;
+}
+.pill:hover{transform:translateY(-2px)}
+.pill.on{background:var(--hi);color:var(--on-hi);box-shadow:2px 2px 0 var(--stroke)}
+.ex-head{font-family:var(--font-display);font-weight:700;font-size:1.15rem;margin:1.6rem 0 .9rem}
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px}
+.subj{background:var(--paper);border:1.5px solid var(--stroke);border-radius:14px;padding:1rem 1.1rem;min-width:0}
+.subj h3{margin-bottom:.5rem}
+.subj ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.subj li{font-size:.9rem;padding:.05rem .55rem;background:var(--bg);border-radius:6px;border:1px solid var(--line)}
+.ex-foot{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:1.4rem}
+.fine{font-size:.88rem;color:var(--muted)}
+
+/* how it works: rising steps */
+.rise{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:end}
+.rise li{
+  border:2px solid var(--stroke);border-radius:14px 14px 4px 4px;padding:1.1rem 1.2rem;
+  display:flex;flex-direction:column;gap:.4rem;transition:transform .2s ease;
+}
+.rise li:hover{transform:translateY(-6px)}
+.rise li:nth-child(1){min-height:11rem;background:var(--paper)}
+.rise li:nth-child(2){min-height:14rem;background:var(--hi);color:var(--on-hi)}
+.rise li:nth-child(3){min-height:17rem;background:var(--accent);color:var(--on-accent)}
+.rise .n{font-family:var(--font-display);font-weight:800;font-size:3rem;line-height:1}
+.rise p{font-size:.98rem}
+.rise li:nth-child(1) p{color:var(--muted)}
+
+/* features notebook */
+.notebook{list-style:none;margin:0;padding:0 0 0 clamp(18px,4vw,44px);border-left:3px solid var(--accent);max-width:46rem}
+.notebook li{display:flex;gap:14px;align-items:baseline;padding-block:.55rem;border-bottom:1.5px solid var(--line)}
+.notebook .tk{font-family:var(--font-hand);font-size:1.7rem;color:var(--accent);line-height:1;flex:none}
+.notebook strong{font-family:var(--font-display);font-weight:700;margin-right:.5rem}
+.notebook span.d{color:var(--muted)}
+
+/* closing band */
+.band{
+  background:var(--btn-bg);color:var(--btn-fg);border-radius:18px;padding:clamp(24px,5vw,48px);
+  display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:56px;
+}
+.band h2{max-width:22ch}
+.band p{opacity:.85;margin-top:.4rem}
+.foot{padding-block:24px 40px;border-top:1.5px solid var(--line);display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between;color:var(--muted);font-size:.92rem}
+
+/* auth modal */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(4,28,28,.64);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.modal{position:relative;width:100%;max-width:440px;background:var(--paper);border:2px solid var(--stroke);border-radius:16px;box-shadow:8px 8px 0 var(--stroke);padding:1.4rem 1.4rem 1.2rem}
+.modal .x{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--stroke);background:var(--bg);font-size:1.3rem;line-height:1}
+.modal h2{font-size:1.6rem;margin:.9rem 0 .8rem}
+.field{display:flex;flex-direction:column;gap:.25rem;margin-bottom:.8rem;font-weight:500;font-size:.95rem}
+.field input,.field select{width:100%}
+.err{min-height:1.4em;color:var(--accent);font-weight:600;font-size:.92rem;margin-bottom:.5rem}
+.modal .btn.primary{width:100%}
+.modal .fine{margin-top:.9rem}
+
+/* dashboard */
+.dash{padding-block:clamp(20px,4vw,40px) 40px}
+.dhead{display:flex;gap:16px 28px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+.dhead h1{font-size:clamp(1.9rem,4.4vw,2.9rem);font-weight:800;line-height:1.2}
+.dhead p{color:var(--muted)}
+.dctl{display:flex;gap:12px;flex-wrap:wrap}
+.dctl label{display:flex;flex-direction:column;gap:.2rem;font-size:.85rem;font-weight:600;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--paper);border:1.5px solid var(--stroke);border-radius:14px;padding:.9rem 1rem}
+.stat .l{font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--font-display);font-weight:800;font-size:2.3rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:1rem;font-weight:600;color:var(--muted);margin-left:.3rem}
+.dgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+.card{background:var(--paper);border:1.5px solid var(--stroke);border-radius:14px;padding:1.1rem 1.2rem;min-width:0}
+.card h2{font-size:1.35rem;margin-bottom:.8rem}
+.card .sub{color:var(--muted);font-size:.92rem;margin:-.5rem 0 .8rem}
+.card.lift{box-shadow:5px 5px 0 var(--stroke)}
+
+details.sj{border-top:1.5px solid var(--line);padding-block:.5rem}
+details.sj:first-of-type{border-top:0}
+details.sj summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:.25rem .8rem;align-items:center;padding-block:.2rem}
+details.sj summary::-webkit-details-marker{display:none}
+.sj-n{font-family:var(--font-display);font-weight:700;font-size:1.1rem}
+.sj-n::before{content:"▸";display:inline-block;margin-right:.5rem;transition:transform .2s ease;color:var(--accent)}
+details[open] .sj-n::before{transform:rotate(90deg)}
+.sj-c{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;font-size:.92rem}
+.bar{grid-column:1/-1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--mint);border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.topics{display:flex;flex-wrap:wrap;gap:8px;padding-block:.7rem .4rem}
+.topic{
+  position:relative;display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .75rem;cursor:pointer;
+  border:1.5px solid var(--stroke);border-radius:8px;background:var(--bg);font-size:.93rem;line-height:1.35;
+  transition:background .15s ease,transform .12s ease;
+}
+.topic:hover{transform:translateY(-1px)}
+.topic input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.topic:focus-within{outline:3px solid var(--sky);outline-offset:2px}
+.topic.on{background:var(--mint);color:var(--on-mint)}
+.topic.on::before{content:"✓";font-weight:700}
+.overall{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;flex-wrap:wrap}
+.overall .bar{flex:1 1 140px;grid-column:auto}
+.overall span{font-weight:600;font-size:.92rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.timer{display:flex;flex-direction:column;align-items:center;gap:.7rem}
+.ring-wrap{position:relative;width:min(100%,210px)}
+.ring{display:block;width:100%;height:auto}
+.ring circle{fill:none;stroke-width:12}
+.ring .rt{stroke:var(--line)}
+.ring .rp{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:540.35;transition:stroke-dashoffset .3s linear,stroke .3s ease}
+.timer.brk .rp{stroke:var(--mint)}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-c b{font-family:var(--font-display);font-weight:800;font-size:2.7rem;line-height:1;font-variant-numeric:tabular-nums}
+.ring-c span{font-family:var(--font-hand);font-size:1.45rem;color:var(--muted);line-height:1.1}
+.trow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+.trow label{display:flex;gap:.5rem;align-items:center;font-size:.9rem;color:var(--muted);font-weight:600}
+.logrow{display:flex;gap:10px;flex-wrap:wrap}
+.logrow input{flex:1 1 100px;width:100px}
+.chart svg{display:block;width:100%;height:auto}
+.gl{stroke:var(--line);stroke-width:1}
+.gt{fill:var(--muted);font:11px var(--font-body)}
+.cb{fill:var(--sky);transform-box:fill-box;transform-origin:bottom;animation:grow .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 70ms)}
+.cb.today{fill:var(--accent)}
+@keyframes grow{from{transform:scaleY(0)}}
+.tasks{list-style:none;margin:.8rem 0 0;padding:0;display:flex;flex-direction:column}
+.tasks li{display:flex;align-items:center;gap:8px;padding-block:.35rem;border-bottom:1.5px solid var(--line)}
+.tasks label{display:flex;gap:.6rem;align-items:center;flex:1;min-width:0;cursor:pointer}
+.tasks label span{overflow-wrap:anywhere}
+.tasks input[type=checkbox]{width:1.15rem;height:1.15rem;accent-color:var(--mint);flex:none}
+.tasks li.done span{text-decoration:line-through;color:var(--muted)}
+.tasks li.empty{color:var(--muted);border-bottom:0;font-size:.95rem}
+.tasks .del{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--stroke);background:var(--bg);line-height:1;flex:none}
+.saved{font-size:.85rem;color:var(--muted);min-height:1.3em;margin-top:.3rem}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:80;
+  transform:translate(-50%,24px);opacity:0;pointer-events:none;
+  background:var(--btn-bg);color:var(--btn-fg);font-family:var(--font-display);font-weight:600;
+  padding:.6rem 1.2rem;border-radius:999px;max-width:calc(100vw - 32px);text-align:center;
+  transition:opacity .25s ease,transform .25s ease;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:960px){.dgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .navlinks{display:none}
+  .rise{grid-template-columns:minmax(0,1fr);align-items:stretch}
+  .rise li:nth-child(n){min-height:0}
+}
+@media (max-width:540px){.hide-sm{display:none}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  mark{background-size:100% 100%}
+  .ticker{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#top" data-go="home" aria-label="NextStep">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="21" width="8" height="9" rx="2" fill="var(--sky)" stroke="var(--stroke)" stroke-width="2"/><rect x="12" y="13" width="8" height="17" rx="2" fill="var(--accent)" stroke="var(--stroke)" stroke-width="2"/><rect x="22" y="4" width="8" height="26" rx="2" fill="var(--hi)" stroke="var(--stroke)" stroke-width="2"/></svg>
+    <span>Next<b>Step</b></span>
+  </a>
+  <nav class="navlinks" aria-label="Main">
+    <a href="#explore" data-go="explore" data-i="nav_explore"></a>
+    <a href="#how" data-go="how" data-i="nav_how"></a>
+    <a href="#features" data-go="features" data-i="nav_feat"></a>
+  </nav>
+  <div class="navright">
+    <button class="icon-btn" id="langBtn" type="button" data-ia="lang_aria"><span id="langLbl">हिन्दी</span></button>
+    <button class="icon-btn" id="themeBtn" type="button" data-ia="theme_aria"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+    <span id="navAuth"></span>
+  </div>
+</header>
+
+<main id="home">
+  <section class="hero wrap" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow" data-i="eyebrow"></p>
+      <h1 data-ih="h1"></h1>
+      <p class="lead" data-i="sub"></p>
+      <div class="cta-row">
+        <button class="btn primary" type="button" data-act="signup" data-i="cta_main"></button>
+        <button class="btn ghost" type="button" data-go="explore" data-i="cta_explore"></button>
+      </div>
+      <div class="pathline" aria-hidden="true"><span>Class 10</span><span>Class 11–12</span><span>JEE</span><span>NEET</span><span>UPSC</span><span>College</span></div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <span class="sym" style="left:2%;top:4%;--d:0">π</span>
+      <span class="sym" style="left:44%;top:-2%;--d:2">∑</span>
+      <span class="sym" style="left:80%;top:12%;--d:4">अ</span>
+      <span class="sym" style="left:4%;top:34%;--d:1">E=mc²</span>
+      <span class="sym" style="left:56%;top:24%;--d:5">H₂O</span>
+      <span class="sym" style="left:84%;top:40%;--d:3">A+</span>
+      <svg viewBox="0 0 420 380" role="img">
+        <line x1="0" y1="350" x2="420" y2="350" stroke="var(--stroke)" stroke-width="3" stroke-linecap="round"/>
+        <g class="stair" style="--i:0"><rect x="14" y="280" width="74" height="70" rx="8" fill="var(--sky)" stroke="var(--stroke)" stroke-width="3"/><text class="stair-t" x="51" y="312" fill="var(--on-sky)" data-i="st0"></text></g>
+        <g class="stair" style="--i:1"><rect x="94" y="228" width="74" height="122" rx="8" fill="var(--accent)" stroke="var(--stroke)" stroke-width="3"/><text class="stair-t" x="131" y="260" fill="var(--on-accent)" data-i="st1"></text></g>
+        <g class="stair" style="--i:2"><rect x="174" y="176" width="74" height="174" rx="8" fill="var(--hi)" stroke="var(--stroke)" stroke-width="3"/><text class="stair-t" x="211" y="208" fill="var(--on-hi)" data-i="st2"></text></g>
+        <g class="stair" style="--i:3"><rect x="254" y="124" width="74" height="226" rx="8" fill="var(--mint)" stroke="var(--stroke)" stroke-width="3"/><text class="stair-t" x="291" y="156" fill="var(--on-mint)" data-i="st3"></text></g>
+        <g class="stair" style="--i:4"><rect x="334" y="72" width="74" height="278" rx="8" fill="var(--ink)" stroke="var(--stroke)" stroke-width="3"/><text class="stair-t" x="371" y="104" fill="var(--bg)" data-i="st4"></text></g>
+        <line x1="396" y1="72" x2="396" y2="30" stroke="var(--bg)" stroke-width="3" stroke-linecap="round"/>
+        <path class="flag" d="M396 30 L416 40 L396 50 Z" fill="var(--hi)" stroke="var(--bg)" stroke-width="2" stroke-linejoin="round"/>
+        <text class="hand-t" x="4" y="222" data-i="st_here"></text>
+        <path d="M30 230 Q34 246 46 254" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M40 255 L47 255 L45 247" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <g class="ball"><circle r="13" fill="var(--accent)" stroke="var(--stroke)" stroke-width="3"/><circle cx="-4" cy="-4" r="3" fill="#fff" opacity=".7"/></g>
+      </svg>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+  <section class="block wrap" id="explore">
+    <div class="sec-head">
+      <h2 data-i="ex_title"></h2>
+      <p data-i="ex_sub"></p>
+    </div>
+    <div class="tabs" role="tablist" id="exTabs" data-ia="ex_tabs_aria"></div>
+    <div class="pills" id="exPills"></div>
+    <h3 class="ex-head" id="exHead"></h3>
+    <div class="subj-grid" id="exGrid"></div>
+    <div class="ex-foot">
+      <button class="btn primary" type="button" id="exCta" data-i="ex_cta"></button>
+      <p class="fine" data-i="ex_note"></p>
+    </div>
+  </section>
+
+  <section class="block wrap" id="how">
+    <div class="sec-head"><h2 data-i="how_title"></h2></div>
+    <ol class="rise">
+      <li><span class="n">1</span><h3 data-i="how1_t"></h3><p data-i="how1_d"></p></li>
+      <li><span class="n">2</span><h3 data-i="how2_t"></h3><p data-i="how2_d"></p></li>
+      <li><span class="n">3</span><h3 data-i="how3_t"></h3><p data-i="how3_d"></p></li>
+    </ol>
+  </section>
+
+  <section class="block wrap" id="features">
+    <div class="sec-head"><h2 data-i="ft_title"></h2><p data-i="ft_sub"></p></div>
+    <ul class="notebook">
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f1t"></strong><span class="d" data-i="f1d"></span></div></li>
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f2t"></strong><span class="d" data-i="f2d"></span></div></li>
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f3t"></strong><span class="d" data-i="f3d"></span></div></li>
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f4t"></strong><span class="d" data-i="f4d"></span></div></li>
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f5t"></strong><span class="d" data-i="f5d"></span></div></li>
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f6t"></strong><span class="d" data-i="f6d"></span></div></li>
+      <li><span class="tk" aria-hidden="true">✓</span><div><strong data-i="f7t"></strong><span class="d" data-i="f7d"></span></div></li>
+    </ul>
+  </section>
+
+  <div class="wrap">
+    <div class="band">
+      <div><h2 data-i="band_t"></h2><p data-i="band_d"></p></div>
+      <button class="btn primary" type="button" data-act="signup" data-i="cta_main"></button>
+    </div>
+  </div>
+</main>
+
+<main id="dash" class="dash wrap" hidden>
+  <div class="dhead">
+    <div><h1 id="dHello"></h1><p data-i="dash_sub"></p></div>
+    <div class="dctl">
+      <label for="dTrack"><span data-i="d_track"></span><select id="dTrack"></select></label>
+      <label for="dExam"><span data-i="d_exam"></span><input type="date" id="dExam"></label>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="dgrid">
+    <div class="col">
+      <section class="card">
+        <h2 data-i="tr_title"></h2>
+        <div class="overall"><div class="bar"><i id="overallBar" style="width:0%"></i></div><span id="overallTxt"></span></div>
+        <div id="trackList"></div>
+      </section>
+    </div>
+    <div class="col">
+      <section class="card lift timer" id="timerCard">
+        <h2 data-i="tm_title"></h2>
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><circle class="rt" cx="100" cy="100" r="86"/><circle class="rp" id="ringP" cx="100" cy="100" r="86" transform="rotate(-90 100 100)" stroke-dashoffset="540.35"/></svg>
+          <div class="ring-c"><b id="tmTime" role="timer">25:00</b><span id="tmMode"></span></div>
+        </div>
+        <div class="trow">
+          <button class="btn primary small" type="button" id="tmGo"></button>
+          <button class="btn ghost small" type="button" id="tmReset" data-i="tm_reset"></button>
+        </div>
+        <div class="trow"><label for="tmLen"><span data-i="tm_len"></span>
+          <select id="tmLen"><option value="15">15</option><option value="25" selected>25</option><option value="45">45</option><option value="60">60</option></select>
+          <span data-i="tm_min"></span></label></div>
+      </section>
+
+      <section class="card">
+        <h2 data-i="lg_title"></h2>
+        <form class="logrow" id="logForm">
+          <input type="number" id="logMin" min="1" max="600" inputmode="numeric" data-ip="lg_ph" aria-label="Minutes">
+          <button class="btn dark small" type="submit" data-i="lg_add"></button>
+        </form>
+      </section>
+
+      <section class="card chart">
+        <h2 data-i="wk_title"></h2>
+        <div id="chart"></div>
+      </section>
+
+      <section class="card">
+        <h2 data-i="tk_title"></h2>
+        <form class="logrow" id="taskForm">
+          <input type="text" id="taskIn" maxlength="120" data-ip="tk_ph" aria-label="Task">
+          <button class="btn dark small" type="submit" data-i="tk_add"></button>
+        </form>
+        <ul class="tasks" id="taskList"></ul>
+      </section>
+
+      <section class="card">
+        <h2 data-i="nt_title"></h2>
+        <textarea id="notes" rows="6" data-ip="nt_ph" aria-label="Notes"></textarea>
+        <p class="saved" id="savedMsg" aria-live="polite"></p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <span data-i="foot"></span>
+  <span data-i="foot_note"></span>
+</footer>
+
+<div class="overlay" id="auth" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="x" type="button" id="authClose" data-ia="close_aria">×</button>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" type="button" id="tabSignup" data-mode="signup" data-i="tab_signup"></button>
+      <button class="tab" role="tab" type="button" id="tabLogin" data-mode="login" data-i="tab_login"></button>
+    </div>
+    <h2 id="authTitle"></h2>
+    <form id="authForm" novalidate>
+      <label class="field" id="rowName" for="fName"><span data-i="f_name"></span><input id="fName" type="text" autocomplete="name"></label>
+      <label class="field" for="fEmail"><span data-i="f_email"></span><input id="fEmail" type="email" autocomplete="email" inputmode="email"></label>
+      <label class="field" for="fPass"><span data-i="f_pass"></span><input id="fPass" type="password" autocomplete="new-password"></label>
+      <label class="field" id="rowTrack" for="fTrack"><span data-i="f_track"></span><select id="fTrack"></select></label>
+      <p class="err" id="authErr" role="alert"></p>
+      <button class="btn primary" type="submit" id="authSubmit"></button>
+    </form>
+    <p class="fine" data-i="auth_note"></p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ---------- Supabase: paste your project values between the quotes ---------- */
+const SUPABASE_URL='https://wwkvvnqumttuxzhqsvka.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3a3Z2bnF1bXR0dXh6aHFzdmthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NzU2MjksImV4cCI6MjEwNzQ1MTYyOX0.aC4Jhvy7QEKyVmpI3T2dnpPofu-IkkJErVXuMr0RRFk'; 
+const sb=(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const cloud=!!sb;  /* false = demo mode: data stays in this browser only */
+
+/* ---------- storage (falls back to memory if the browser blocks it) ---------- */
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);if(v!==null)return JSON.parse(v);}catch(e){}return (k in mem)?mem[k]:d;},
+  set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+
+/* ---------- syllabus data ---------- */
+const S=(en,hi,t)=>({en,hi,t:t.split('|')});
+const TRACKS=[
+ {id:'c10',g:'school',en:'Class 10',hi:'कक्षा 10',sub:[
+  S('Maths','गणित','Real Numbers|Polynomials|Linear Equations in Two Variables|Quadratic Equations|Arithmetic Progressions|Triangles|Coordinate Geometry|Trigonometry|Circles|Surface Areas and Volumes|Statistics|Probability'),
+  S('Science','विज्ञान','Chemical Reactions and Equations|Acids, Bases and Salts|Metals and Non-metals|Carbon and its Compounds|Life Processes|Control and Coordination|Heredity|Light: Reflection and Refraction|Human Eye|Electricity|Magnetic Effects of Current'),
+  S('Social Science','सामाजिक विज्ञान','Nationalism in Europe|Nationalism in India|Resources and Development|Agriculture|Power Sharing|Federalism|Development|Money and Credit'),
+  S('English','अंग्रेज़ी','Reading Comprehension|Writing Skills|Grammar|First Flight: Prose|First Flight: Poetry|Footprints Without Feet'),
+  S('Hindi','हिन्दी','क्षितिज: गद्य|क्षितिज: काव्य|कृतिका|व्याकरण|पत्र और निबंध|अपठित गद्यांश')]},
+ {id:'pcm',g:'school',en:'Class 11–12 Science (PCM)',hi:'कक्षा 11–12 विज्ञान (PCM)',sub:[
+  S('Physics','भौतिकी','Units and Measurements|Kinematics|Laws of Motion|Work, Energy and Power|Thermodynamics|Electrostatics|Current Electricity|Magnetism|Optics|Modern Physics'),
+  S('Chemistry','रसायन विज्ञान','Basic Concepts|Atomic Structure|Chemical Bonding|Thermodynamics|Equilibrium|Electrochemistry|Organic Chemistry Basics|Coordination Compounds'),
+  S('Maths','गणित','Sets and Functions|Trigonometry|Complex Numbers|Limits and Derivatives|Integrals|Matrices and Determinants|Vectors and 3D Geometry|Probability'),
+  S('English','अंग्रेज़ी','Reading|Writing|Grammar|Literature')]},
+ {id:'pcb',g:'school',en:'Class 11–12 Science (PCB)',hi:'कक्षा 11–12 विज्ञान (PCB)',sub:[
+  S('Physics','भौतिकी','Units and Measurements|Kinematics|Laws of Motion|Work, Energy and Power|Electrostatics|Current Electricity|Optics|Modern Physics'),
+  S('Chemistry','रसायन विज्ञान','Basic Concepts|Atomic Structure|Chemical Bonding|Equilibrium|Electrochemistry|Organic Chemistry Basics|Biomolecules'),
+  S('Biology','जीव विज्ञान','Cell Structure|Plant Physiology|Human Physiology|Reproduction|Genetics and Evolution|Biotechnology|Ecology'),
+  S('English','अंग्रेज़ी','Reading|Writing|Grammar|Literature')]},
+ {id:'com',g:'school',en:'Class 11–12 Commerce',hi:'कक्षा 11–12 वाणिज्य',sub:[
+  S('Accountancy','लेखाशास्त्र','Accounting Basics|Journal and Ledger|Trial Balance|Depreciation|Partnership Accounts|Company Accounts|Cash Flow Statement|Financial Statement Analysis'),
+  S('Business Studies','व्यवसाय अध्ययन','Nature of Business|Forms of Organisation|Business Services|Principles of Management|Planning|Marketing|Financial Management|Consumer Protection'),
+  S('Economics','अर्थशास्त्र','Statistics for Economics|Demand and Supply|Producer Behaviour|National Income|Money and Banking|Government Budget|Balance of Payments'),
+  S('English','अंग्रेज़ी','Reading|Writing|Grammar|Literature')]},
+ {id:'arts',g:'school',en:'Class 11–12 Arts',hi:'कक्षा 11–12 कला',sub:[
+  S('History','इतिहास','Early Societies|Mauryan to Gupta Age|Mughal Empire|Colonialism|Freedom Struggle|Partition and Independence'),
+  S('Political Science','राजनीति विज्ञान','Constitution|Rights|Federalism|Elections|International Relations|Politics in India Since Independence'),
+  S('Geography','भूगोल','Physical Geography|Human Geography|Resources|India: Physical Environment|Population|Transport and Trade'),
+  S('English','अंग्रेज़ी','Reading|Writing|Grammar|Literature')]},
+ {id:'jee',g:'comp',s:'JEE',en:'JEE Main and Advanced',hi:'जेईई मेन व एडवांस्ड',sub:[
+  S('Physics','भौतिकी','Mechanics|Heat and Thermodynamics|Electrostatics|Current and Magnetism|Optics|Modern Physics'),
+  S('Physical Chemistry','भौतिक रसायन','Mole Concept|Atomic Structure|Thermodynamics|Equilibrium|Electrochemistry|Chemical Kinetics'),
+  S('Organic Chemistry','कार्बनिक रसायन','General Organic Chemistry|Hydrocarbons|Haloalkanes|Alcohols, Phenols, Ethers|Aldehydes and Ketones|Biomolecules'),
+  S('Inorganic Chemistry','अकार्बनिक रसायन','Periodic Table|Chemical Bonding|p-Block|d and f Block|Coordination Compounds|Metallurgy'),
+  S('Mathematics','गणित','Algebra|Trigonometry|Coordinate Geometry|Calculus|Vectors and 3D|Probability and Statistics')]},
+ {id:'neet',g:'comp',s:'NEET',en:'NEET UG',hi:'नीट यूजी',sub:[
+  S('Physics','भौतिकी','Mechanics|Thermodynamics|Electrodynamics|Optics|Modern Physics'),
+  S('Chemistry','रसायन विज्ञान','Mole Concept|Chemical Bonding|Equilibrium|Electrochemistry|General Organic Chemistry|Biomolecules|Coordination Compounds'),
+  S('Botany','वनस्पति विज्ञान','Cell Biology|Plant Kingdom|Morphology and Anatomy|Photosynthesis and Respiration|Genetics|Ecology'),
+  S('Zoology','जंतु विज्ञान','Human Physiology|Animal Kingdom|Reproduction|Evolution|Biotechnology|Human Health and Disease')]},
+ {id:'upsc',g:'comp',s:'UPSC',en:'UPSC Civil Services',hi:'यूपीएससी सिविल सेवा',sub:[
+  S('History and Culture','इतिहास व संस्कृति','Ancient India|Medieval India|Modern India|Art and Culture'),
+  S('Polity and Governance','राजव्यवस्था व शासन','Constitution|Parliament|Judiciary|Federalism|Local Government'),
+  S('Geography','भूगोल','Physical Geography|Indian Geography|World Geography|Human Geography'),
+  S('Economy','अर्थव्यवस्था','Basic Concepts|Banking|Budget and Taxation|External Sector'),
+  S('Environment and Science','पर्यावरण व विज्ञान','Ecology|Biodiversity|Climate Change|Science and Technology'),
+  S('CSAT and Current Affairs','सीसैट व करेंट अफेयर्स','Reading Comprehension|Basic Numeracy|Logical Reasoning|Daily Current Affairs|Newspaper Notes')]},
+ {id:'ssc',g:'comp',s:'SSC',en:'SSC CGL / CHSL',hi:'एसएससी सीजीएल / सीएचएसएल',sub:[
+  S('Quantitative Aptitude','मात्रात्मक योग्यता','Number System|Percentage|Profit and Loss|Time and Work|Algebra|Geometry|Trigonometry|Data Interpretation'),
+  S('Reasoning','तर्कशक्ति','Analogy|Series|Coding-Decoding|Syllogism|Blood Relations|Puzzles'),
+  S('English','अंग्रेज़ी','Reading Comprehension|Vocabulary|Grammar|Error Spotting|Cloze Test'),
+  S('General Awareness','सामान्य जागरूकता','History|Polity|Geography|Science|Static GK|Current Affairs')]},
+ {id:'bank',g:'comp',s:'Banking',en:'Banking (IBPS, SBI)',hi:'बैंकिंग (IBPS, SBI)',sub:[
+  S('Quantitative Aptitude','मात्रात्मक योग्यता','Simplification|Number Series|Data Interpretation|Arithmetic|Quadratic Equations'),
+  S('Reasoning','तर्कशक्ति','Puzzles|Seating Arrangement|Syllogism|Inequality|Input-Output'),
+  S('English','अंग्रेज़ी','Reading Comprehension|Cloze Test|Error Spotting|Para Jumbles|Vocabulary'),
+  S('Banking and GA','बैंकिंग व सामान्य ज्ञान','Banking Awareness|Economy|Current Affairs|Computer Knowledge')]},
+ {id:'cuet',g:'comp',s:'CUET',en:'CUET UG',hi:'सीयूईटी यूजी',sub:[
+  S('Domain Subjects','डोमेन विषय','Choose your subjects|Class 12 NCERT Revision|Chapter Tests|Mock Tests'),
+  S('English','अंग्रेज़ी','Reading Comprehension|Vocabulary|Grammar'),
+  S('General Test','सामान्य परीक्षण','Current Affairs|General Knowledge|Numerical Ability|Logical Reasoning')]},
+ {id:'clat',g:'comp',s:'CLAT',en:'CLAT (Law)',hi:'क्लैट (विधि)',sub:[
+  S('English Language','अंग्रेज़ी भाषा','Reading Passages|Vocabulary|Grammar'),
+  S('Current Affairs and GK','करेंट अफेयर्स व GK','Current Affairs|Static GK|Legal News'),
+  S('Legal Reasoning','विधिक तर्क','Legal Principles|Case Passages|Basic Constitution'),
+  S('Logical Reasoning','तार्किक तर्क','Arguments|Analogies|Critical Reasoning'),
+  S('Quantitative Techniques','मात्रात्मक तकनीक','Arithmetic|Data Interpretation|Basic Algebra')]},
+ {id:'cat',g:'comp',s:'CAT',en:'CAT (MBA)',hi:'कैट (MBA)',sub:[
+  S('Quantitative Ability','मात्रात्मक योग्यता','Arithmetic|Algebra|Geometry|Number System|Modern Maths'),
+  S('VARC','शब्द व पठन योग्यता','Reading Comprehension|Para Jumbles|Para Summary|Odd Sentence Out'),
+  S('DILR','डेटा व तर्क','Tables and Graphs|Arrangements|Games and Tournaments|Venn Diagrams')]},
+ {id:'gate',g:'comp',s:'GATE',en:'GATE',hi:'गेट',sub:[
+  S('Engineering Mathematics','इंजीनियरिंग गणित','Linear Algebra|Calculus|Probability|Differential Equations|Numerical Methods'),
+  S('General Aptitude','सामान्य अभिरुचि','Verbal Ability|Numerical Ability|Spatial Aptitude'),
+  S('Core Subject','कोर विषय','Subject-wise Notes|Previous Year Papers|Full-length Mocks|Revision')]},
+ {id:'nda',g:'comp',s:'NDA / CDS',en:'NDA / CDS',hi:'एनडीए / सीडीएस',sub:[
+  S('Mathematics','गणित','Algebra|Trigonometry|Calculus|Statistics|Geometry'),
+  S('English','अंग्रेज़ी','Grammar|Vocabulary|Comprehension'),
+  S('General Knowledge','सामान्य ज्ञान','Physics|Chemistry|History|Geography|Polity|Current Affairs')]},
+ {id:'rrb',g:'comp',s:'RRB',en:'RRB NTPC / Group D',hi:'आरआरबी एनटीपीसी / ग्रुप डी',sub:[
+  S('Maths','गणित','Number System|Percentage|Ratio and Proportion|Time and Work|Geometry'),
+  S('Reasoning','तर्कशक्ति','Series|Analogy|Coding-Decoding|Venn Diagrams|Direction Sense'),
+  S('General Awareness','सामान्य जागरूकता','History|Polity|Geography|Current Affairs'),
+  S('General Science','सामान्य विज्ञान','Physics|Chemistry|Biology')]},
+ {id:'net',g:'comp',s:'UGC NET',en:'UGC NET',hi:'यूजीसी नेट',sub:[
+  S('Paper 1','पेपर 1','Teaching Aptitude|Research Aptitude|Comprehension|Reasoning|Data Interpretation|Higher Education System'),
+  S('Paper 2 (your subject)','पेपर 2 (आपका विषय)','Unit-wise Syllabus|Previous Year Papers|Mock Tests|Revision')]},
+ {id:'psc',g:'comp',s:'State PSC',en:'State PSC',hi:'राज्य लोक सेवा आयोग',sub:[
+  S('General Studies','सामान्य अध्ययन','History|Polity|Geography|Economy|Science|Current Affairs'),
+  S('State Specific','राज्य विशेष','State History and Culture|State Geography|State Schemes'),
+  S('Aptitude and Language','अभिरुचि व भाषा','Reasoning|Quantitative Aptitude|Hindi|English')]},
+ {id:'ctet',g:'comp',s:'CTET',en:'CTET / State TET',hi:'सीटीईटी / राज्य टीईटी',sub:[
+  S('Child Development and Pedagogy','बाल विकास व शिक्षाशास्त्र','Development Stages|Learning Theories|Inclusive Education|Teaching Methods'),
+  S('Language I and II','भाषा I और II','Hindi|English|Language Pedagogy'),
+  S('Maths and EVS','गणित व EVS','Maths Concepts|EVS Concepts|Pedagogy of Maths|Pedagogy of EVS')]},
+ {id:'college',g:'college',en:'College Life',hi:'कॉलेज लाइफ',sub:[
+  S('Semester Studies','सेमेस्टर की पढ़ाई','Syllabus Plan|Notes|Assignments|Internal Exams|Semester Revision'),
+  S('Skills','कौशल','Coding Basics|Communication|Resume|Projects|Internship Search'),
+  S('Career','करियर','Career Options|Choosing a Competitive Exam|Higher Studies')]}
+];
+const byId=id=>TRACKS.find(x=>x.id===id)||TRACKS[0];
+
+/* ---------- text (Hindi + English) ---------- */
+const L={
+en:{
+ nav_explore:'Syllabus',nav_how:'How it works',nav_feat:'Features',nav_dash:'Dashboard',nav_home:'Home',
+ login:'Log in',signup:'Sign up',logout:'Log out',lang_aria:'Switch language',theme_aria:'Switch light or dark theme',close_aria:'Close',
+ eyebrow:'Student life hub',
+ h1:'From Class 10 to UPSC, your <mark>next step</mark> starts here.',
+ sub:'Plan your syllabus, run focus sessions, keep a study streak and count down to exam day. Made for school, competitive exam and college students.',
+ cta_main:'Create my account',cta_explore:'See the syllabus',
+ st0:'Class 10',st1:'Class 12',st2:'Exams',st3:'College',st4:'Career',st_here:'start here',
+ ex_title:'Syllabus explorer',ex_sub:'Pick your class or exam to see the subjects and topics you can tick off on your dashboard.',
+ ex_tabs_aria:'Choose a group',g_school:'School · Class 10–12',g_comp:'Competitive exams',g_college:'College',
+ ex_subjects:'subjects',ex_topics:'topics',ex_cta:'Track this on my dashboard',
+ ex_note:'Topic lists are a starting outline. Always check your board or exam body for the official syllabus.',
+ how_title:'Three steps to start',
+ how1_t:'Sign up',how1_d:'Create your account and pick your class or exam.',
+ how2_t:'Plan',how2_d:'Your dashboard fills with subjects and topics to tick off.',
+ how3_t:'Climb',how3_d:'Run focus sessions, build your streak and watch exam day come closer.',
+ ft_title:'What you get on your dashboard',ft_sub:'Everything a student needs for daily study, on one page.',
+ f1t:'Focus timer',f1d:'Study in timed sessions with breaks. Finished sessions are logged for you.',
+ f2t:'Syllabus tracker',f2d:'Tick off topics subject by subject and watch the progress bar fill.',
+ f3t:'Study streak',f3d:'Study a little every day to keep your streak alive.',
+ f4t:'Exam countdown',f4d:'Set your exam date and see how many days are left.',
+ f5t:'Daily tasks',f5d:'Write down what you plan to do today and cross it off.',
+ f6t:'Quick notes',f6d:'A notepad that saves while you type.',
+ f7t:'Hindi + English',f7d:'Switch the whole site between Hindi and English any time.',
+ band_t:'Ready for your next step?',band_d:'Create your account and pick your goal.',
+ foot:'NextStep · Student life hub',foot_note:'Preview build. Accounts and progress are saved in this browser only.',
+ tab_signup:'Sign up',tab_login:'Log in',auth_t_signup:'Create your account',auth_t_login:'Welcome back',
+ f_name:'Full name',f_email:'Email',f_pass:'Password (6+ characters)',f_track:'I am preparing for',
+ btn_signup:'Create account',btn_login:'Log in',
+ auth_note:'Preview build: your account is saved in this browser only.',
+ e_name:'Please enter your name.',e_email:'Enter a valid email address.',e_pass:'Password must be at least 6 characters.',
+ e_exists:'This email is already registered. Log in instead.',e_bad:'Email or password is incorrect.',
+ e_net:'Something went wrong. Check your internet and try again.',auth_confirm:'Account created. Check your email to confirm it, then log in.',
+ auth_note_cloud:'Your account and progress are saved online, so you can log in from any device.',foot_note_cloud:'Your progress is saved to your account.',
+ hello:'Hi, {n}',dash_sub:'This is your study space for today.',d_track:'Preparing for',d_exam:'Exam date',
+ s_streak:'Day streak',s_week:'Hours, last 7 days',s_syll:'Syllabus done',s_days:'To exam',
+ u_days:'days',u_hrs:'hrs',exam_none:'Set a date',exam_today:'Today',exam_past:'Passed',
+ tm_title:'Focus timer',tm_focus:'focus',tm_break:'break',tm_start:'Start',tm_pause:'Pause',tm_reset:'Reset',tm_len:'Session',tm_min:'min',
+ lg_title:'Log study time',lg_add:'Add',lg_ph:'Minutes studied',
+ wk_title:'Last 7 days',tr_title:'Syllabus tracker',tr_of:'{a} of {b} topics',
+ tk_title:'Today\'s tasks',tk_ph:'Add a task',tk_add:'Add',tk_empty:'No tasks yet. Add your first one above.',tk_del:'Delete task',
+ nt_title:'Quick notes',nt_ph:'Write anything you want to remember...',nt_saved:'Saved',
+ t_done:'Session done. {m} min logged.',t_break:'Break over. Ready for another round?',t_logged:'{m} min logged.',t_welcome:'Account created. Welcome, {n}!',
+ wd:['S','M','T','W','T','F','S']
+},
+hi:{
+ nav_explore:'सिलेबस',nav_how:'कैसे काम करता है',nav_feat:'फ़ीचर',nav_dash:'डैशबोर्ड',nav_home:'होम',
+ login:'लॉग इन',signup:'साइन अप',logout:'लॉग आउट',lang_aria:'भाषा बदलें',theme_aria:'लाइट या डार्क थीम बदलें',close_aria:'बंद करें',
+ eyebrow:'स्टूडेंट लाइफ हब',
+ h1:'कक्षा 10 से UPSC तक, आपका <mark>अगला कदम</mark> यहीं से शुरू।',
+ sub:'अपना सिलेबस प्लान करें, फ़ोकस सेशन चलाएँ, स्टडी स्ट्रीक बनाएँ और परीक्षा के दिन तक की गिनती रखें। स्कूल, प्रतियोगी परीक्षा और कॉलेज के छात्रों के लिए।',
+ cta_main:'मेरा अकाउंट बनाएँ',cta_explore:'सिलेबस देखें',
+ st0:'कक्षा 10',st1:'कक्षा 12',st2:'परीक्षा',st3:'कॉलेज',st4:'करियर',st_here:'यहाँ से',
+ ex_title:'सिलेबस एक्सप्लोरर',ex_sub:'अपनी कक्षा या परीक्षा चुनें और देखें कौन से विषय व टॉपिक आप डैशबोर्ड पर टिक कर सकते हैं।',
+ ex_tabs_aria:'समूह चुनें',g_school:'स्कूल · कक्षा 10–12',g_comp:'प्रतियोगी परीक्षाएँ',g_college:'कॉलेज',
+ ex_subjects:'विषय',ex_topics:'टॉपिक',ex_cta:'इसे मेरे डैशबोर्ड पर ट्रैक करें',
+ ex_note:'टॉपिक सूची एक शुरुआती रूपरेखा है। आधिकारिक सिलेबस के लिए अपने बोर्ड या परीक्षा संस्था की साइट ज़रूर देखें।',
+ how_title:'तीन कदम में शुरू करें',
+ how1_t:'साइन अप करें',how1_d:'अकाउंट बनाएँ और अपनी कक्षा या परीक्षा चुनें।',
+ how2_t:'प्लान बनाएँ',how2_d:'आपके डैशबोर्ड पर विषय और टॉपिक आ जाते हैं, जिन्हें आप टिक करते जाएँ।',
+ how3_t:'ऊपर चढ़ें',how3_d:'फ़ोकस सेशन चलाएँ, स्ट्रीक बनाएँ और परीक्षा का दिन पास आते देखें।',
+ ft_title:'आपके डैशबोर्ड पर क्या मिलेगा',ft_sub:'रोज़ की पढ़ाई के लिए ज़रूरी सब कुछ, एक ही पेज पर।',
+ f1t:'फ़ोकस टाइमर',f1d:'ब्रेक के साथ समय तय करके पढ़ें। पूरे हुए सेशन अपने आप दर्ज होते हैं।',
+ f2t:'सिलेबस ट्रैकर',f2d:'विषय-दर-विषय टॉपिक टिक करें और प्रोग्रेस बार भरते देखें।',
+ f3t:'स्टडी स्ट्रीक',f3d:'रोज़ थोड़ा पढ़ें और अपनी स्ट्रीक बनाए रखें।',
+ f4t:'परीक्षा काउंटडाउन',f4d:'परीक्षा की तारीख़ डालें और बचे हुए दिन देखें।',
+ f5t:'रोज़ के काम',f5d:'आज क्या करना है लिखें और पूरा होने पर काट दें।',
+ f6t:'क्विक नोट्स',f6d:'एक नोटपैड जो लिखते ही सेव हो जाता है।',
+ f7t:'हिंदी + English',f7d:'पूरी साइट कभी भी हिंदी और अंग्रेज़ी के बीच बदलें।',
+ band_t:'अपने अगले कदम के लिए तैयार हैं?',band_d:'अकाउंट बनाएँ और अपना लक्ष्य चुनें।',
+ foot:'NextStep · स्टूडेंट लाइफ हब',foot_note:'प्रिव्यू बिल्ड। अकाउंट और प्रोग्रेस सिर्फ़ इसी ब्राउज़र में सेव होते हैं।',
+ tab_signup:'साइन अप',tab_login:'लॉग इन',auth_t_signup:'अपना अकाउंट बनाएँ',auth_t_login:'वापसी पर स्वागत है',
+ f_name:'पूरा नाम',f_email:'ईमेल',f_pass:'पासवर्ड (कम से कम 6 अक्षर)',f_track:'मैं तैयारी कर रहा/रही हूँ',
+ btn_signup:'अकाउंट बनाएँ',btn_login:'लॉग इन करें',
+ auth_note:'प्रिव्यू बिल्ड: आपका अकाउंट सिर्फ़ इसी ब्राउज़र में सेव होता है।',
+ e_name:'कृपया अपना नाम लिखें।',e_email:'सही ईमेल पता लिखें।',e_pass:'पासवर्ड कम से कम 6 अक्षर का होना चाहिए।',
+ e_exists:'यह ईमेल पहले से रजिस्टर है। लॉग इन करें।',e_bad:'ईमेल या पासवर्ड गलत है।',
+ e_net:'कुछ गड़बड़ हो गई। इंटरनेट जाँचें और दोबारा कोशिश करें।',auth_confirm:'अकाउंट बन गया। ईमेल में आया लिंक खोलकर कन्फ़र्म करें, फिर लॉग इन करें।',
+ auth_note_cloud:'आपका अकाउंट और प्रोग्रेस ऑनलाइन सेव होते हैं, इसलिए किसी भी डिवाइस से लॉग इन कर सकते हैं।',foot_note_cloud:'आपकी प्रोग्रेस आपके अकाउंट में सेव होती है।',
+ hello:'नमस्ते, {n}',dash_sub:'यह आज की आपकी पढ़ाई की जगह है।',d_track:'तैयारी',d_exam:'परीक्षा की तारीख़',
+ s_streak:'दिन की स्ट्रीक',s_week:'घंटे, पिछले 7 दिन',s_syll:'सिलेबस पूरा',s_days:'परीक्षा में',
+ u_days:'दिन',u_hrs:'घंटे',exam_none:'तारीख़ चुनें',exam_today:'आज',exam_past:'बीत गई',
+ tm_title:'फ़ोकस टाइमर',tm_focus:'फ़ोकस',tm_break:'ब्रेक',tm_start:'शुरू',tm_pause:'रोकें',tm_reset:'रीसेट',tm_len:'सेशन',tm_min:'मिनट',
+ lg_title:'पढ़ाई का समय दर्ज करें',lg_add:'जोड़ें',lg_ph:'कितने मिनट पढ़े',
+ wk_title:'पिछले 7 दिन',tr_title:'सिलेबस ट्रैकर',tr_of:'{b} में से {a} टॉपिक',
+ tk_title:'आज के काम',tk_ph:'काम लिखें',tk_add:'जोड़ें',tk_empty:'अभी कोई काम नहीं। ऊपर पहला काम जोड़ें।',tk_del:'काम हटाएँ',
+ nt_title:'क्विक नोट्स',nt_ph:'जो याद रखना है, यहाँ लिखें...',nt_saved:'सेव हुआ',
+ t_done:'सेशन पूरा। {m} मिनट दर्ज हुए।',t_break:'ब्रेक खत्म। अगला राउंड शुरू करें?',t_logged:'{m} मिनट दर्ज हुए।',t_welcome:'अकाउंट बन गया। स्वागत है, {n}!',
+ wd:['र','सो','मं','बु','गु','शु','श']
+}};
+
+let lang=store.get('ns_lang','en'); if(lang!=='hi')lang='en';
+function t(k,v){
+  let s=(L[lang]&&L[lang][k]!==undefined)?L[lang][k]:(L.en[k]!==undefined?L.en[k]:k);
+  if(v&&typeof s==='string')for(const x in v)s=s.split('{'+x+'}').join(v[x]);
+  return s;
+}
+const tn=x=>lang==='hi'?x.hi:x.en;
+
+/* ---------- helpers ---------- */
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dkey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+async function hash(email,pw){
+  try{
+    const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('nextstep:'+email+':'+pw));
+    return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+  }catch(e){
+    let h=5381;const s='nextstep:'+email+':'+pw;
+    for(let i=0;i<s.length;i++)h=((h*33)^s.charCodeAt(i))>>>0;
+    return 'f'+h.toString(16);
+  }
+}
+let toastT;
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3200);}
+
+/* ---------- state ---------- */
+let me=null,view='home',exGroup='school',exTrack='c10';
+const users=()=>store.get('ns_users',{});
+function save(){if(!me)return;const U=users();U[me.profile.email]=me;store.set('ns_users',U);}
+
+/* ---------- saving: Supabase when configured, this browser otherwise ---------- */
+const fail=()=>toast(t('e_net'));
+const done=r=>{if(r&&r.error)fail();};
+const persist={
+  profile(){if(!me)return;if(!cloud){save();return;}sb.from('profiles').update({track:me.profile.track,exam:me.profile.exam||null}).eq('id',me.uid).then(done,fail);},
+  notes(){if(!me)return;if(!cloud){save();return;}sb.from('profiles').update({notes:me.notes}).eq('id',me.uid).then(done,fail);},
+  done(key,on){
+    if(!cloud){save();return;}
+    const q=on?sb.from('progress').upsert({user_id:me.uid,topic_key:key}):sb.from('progress').delete().eq('user_id',me.uid).eq('topic_key',key);
+    q.then(done,fail);
+  },
+  log(day){if(!cloud){save();return;}sb.from('study_log').upsert({user_id:me.uid,day:day,minutes:me.log[day]},{onConflict:'user_id,day'}).then(done,fail);},
+  async taskAdd(text){
+    if(!cloud){me.tasks.unshift({id:Date.now(),t:text,d:false});save();return;}
+    try{
+      const r=await sb.from('tasks').insert({user_id:me.uid,text:text}).select().single();
+      if(r.error){fail();return;}
+      me.tasks.unshift({id:r.data.id,t:r.data.text,d:r.data.done});
+    }catch(e){fail();}
+  },
+  taskDone(k){if(!cloud){save();return;}sb.from('tasks').update({done:k.d}).eq('id',k.id).then(done,fail);},
+  taskDel(id){if(!cloud){save();return;}sb.from('tasks').delete().eq('id',id).then(done,fail);}
+};
+async function enterCloud(user){
+  const r=await Promise.all([
+    sb.from('profiles').select('*').eq('id',user.id).maybeSingle(),
+    sb.from('progress').select('topic_key').eq('user_id',user.id),
+    sb.from('study_log').select('day,minutes').eq('user_id',user.id),
+    sb.from('tasks').select('*').eq('user_id',user.id).order('created_at',{ascending:false})
+  ]);
+  if(r.some(x=>x.error))throw new Error('load');
+  const meta=user.user_metadata||{},row=r[0].data||{};
+  me={uid:user.id,profile:{name:row.name||meta.name||user.email.split('@')[0],email:user.email,track:row.track||meta.track||'c10',exam:row.exam||''},done:{},log:{},tasks:[],notes:row.notes||''};
+  r[1].data.forEach(x=>{me.done[x.topic_key]=true;});
+  r[2].data.forEach(x=>{me.log[x.day]=x.minutes;});
+  me.tasks=r[3].data.map(x=>({id:x.id,t:x.text,d:x.done}));
+}
+async function cloudAuth(){
+  const err=$('#authErr');err.textContent='';
+  const email=$('#fEmail').value.trim().toLowerCase(),pass=$('#fPass').value;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=t('e_email');return;}
+  try{
+    if(authMode==='signup'){
+      const name=$('#fName').value.trim();
+      if(!name){err.textContent=t('e_name');return;}
+      if(pass.length<6){err.textContent=t('e_pass');return;}
+      const r=await sb.auth.signUp({email:email,password:pass,options:{data:{name:name,track:$('#fTrack').value}}});
+      if(r.error){err.textContent=/registered|exists/i.test(r.error.message)?t('e_exists'):t('e_net');return;}
+      if(r.data.user&&r.data.user.identities&&r.data.user.identities.length===0){err.textContent=t('e_exists');return;}
+      if(!r.data.session){setMode('login');err.textContent=t('auth_confirm');$('#fPass').value='';return;}
+      await enterCloud(r.data.session.user);
+      closeAuth();showView('dash');toast(t('t_welcome',{n:name.split(' ')[0]}));
+    }else{
+      const r=await sb.auth.signInWithPassword({email:email,password:pass});
+      if(r.error){err.textContent=/confirm/i.test(r.error.message)?t('auth_confirm'):t('e_bad');return;}
+      await enterCloud(r.data.user);
+      closeAuth();showView('dash');
+    }
+    $('#fPass').value='';
+  }catch(e){err.textContent=t('e_net');}
+}
+
+/* ---------- language ---------- */
+function buildTrackSelect(sel,value){
+  const groups=['school','comp','college'];
+  sel.innerHTML=groups.map(g=>'<optgroup label="'+esc(t('g_'+g))+'">'+TRACKS.filter(x=>x.g===g).map(x=>'<option value="'+x.id+'">'+esc(tn(x))+'</option>').join('')+'</optgroup>').join('');
+  sel.value=value||'c10';
+}
+function applyLang(){
+  document.documentElement.lang=lang==='hi'?'hi':'en';
+  $$('[data-i]').forEach(el=>{el.textContent=t(el.dataset.i);});
+  $$('[data-ih]').forEach(el=>{el.innerHTML=t(el.dataset.ih);});
+  $$('[data-ip]').forEach(el=>{el.placeholder=t(el.dataset.ip);});
+  $$('[data-ia]').forEach(el=>{el.setAttribute('aria-label',t(el.dataset.ia));});
+  if(cloud){
+    $$('[data-i="auth_note"]').forEach(el=>{el.textContent=t('auth_note_cloud');});
+    $$('[data-i="foot_note"]').forEach(el=>{el.textContent=t('foot_note_cloud');});
+  }
+  const cur=$('#fTrack').value;buildTrackSelect($('#fTrack'),cur||'c10');
+  setMode(authMode);
+  renderNav();renderExplorer();
+  if(me){buildTrackSelect($('#dTrack'),me.profile.track);renderDash();}
+  drawTimer();
+}
+
+/* ---------- navigation ---------- */
+function renderNav(){
+  $('#navAuth').innerHTML=me
+    ?'<button class="btn small ghost" type="button" data-go="'+(view==='dash'?'home':'dash')+'">'+esc(t(view==='dash'?'nav_home':'nav_dash'))+'</button><button class="btn small ghost" type="button" data-act="logout">'+esc(t('logout'))+'</button>'
+    :'<button class="btn small ghost" type="button" data-act="login">'+esc(t('login'))+'</button><button class="btn small primary hide-sm" type="button" data-act="signup">'+esc(t('signup'))+'</button>';
+  $('#langLbl').textContent=lang==='en'?'हिन्दी':'EN';
+}
+function showView(v,anchor){
+  if(v==='dash'&&!me)v='home';
+  view=v;
+  $('#home').hidden=v!=='home';
+  $('#dash').hidden=v!=='dash';
+  if(v==='dash'){fillDash();renderDash();}
+  renderNav();
+  if(anchor){requestAnimationFrame(()=>{const el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:'smooth'});});}
+  else window.scrollTo({top:0});
+}
+function go(id){
+  if(id==='home'){showView('home');return;}
+  if(id==='dash'){showView('dash');return;}
+  if(view!=='home')showView('home',id);
+  else{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});}
+}
+
+/* ---------- ticker ---------- */
+function renderTicker(){
+  const names=TRACKS.filter(x=>x.g==='comp').map(x=>x.s);
+  const row=names.map(n=>'<span>'+esc(n)+'</span>').join('');
+  $('#tickerTrack').innerHTML=row+row;
+}
+
+/* ---------- explorer ---------- */
+function renderExplorer(){
+  const groups=['school','comp','college'];
+  $('#exTabs').innerHTML=groups.map(g=>'<button class="tab'+(g===exGroup?' on':'')+'" type="button" role="tab" aria-selected="'+(g===exGroup)+'" data-g="'+g+'">'+esc(t('g_'+g))+'</button>').join('');
+  const list=TRACKS.filter(x=>x.g===exGroup);
+  if(!list.some(x=>x.id===exTrack))exTrack=list[0].id;
+  $('#exPills').innerHTML=list.map(x=>'<button class="pill'+(x.id===exTrack?' on':'')+'" type="button" aria-pressed="'+(x.id===exTrack)+'" data-tr="'+x.id+'">'+esc(tn(x))+'</button>').join('');
+  const tr=byId(exTrack);
+  const n=tr.sub.reduce((a,s)=>a+s.t.length,0);
+  $('#exHead').textContent=tn(tr)+' · '+tr.sub.length+' '+t('ex_subjects')+' · '+n+' '+t('ex_topics');
+  $('#exGrid').innerHTML=tr.sub.map(s=>'<article class="subj"><h3>'+esc(tn(s))+'</h3><ul>'+s.t.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></article>').join('');
+}
+function startTrack(id){
+  if(me){me.profile.track=id;persist.profile();showView('dash');}
+  else openAuth('signup',id);
+}
+
+/* ---------- auth ---------- */
+let authMode='signup',authTrack=null,lastFocus=null;
+function setMode(m){
+  authMode=m;
+  $('#tabSignup').setAttribute('aria-selected',String(m==='signup'));
+  $('#tabSignup').classList.toggle('on',m==='signup');
+  $('#tabLogin').setAttribute('aria-selected',String(m==='login'));
+  $('#tabLogin').classList.toggle('on',m==='login');
+  $('#rowName').hidden=m!=='signup';
+  $('#rowTrack').hidden=m!=='signup';
+  $('#authTitle').textContent=t(m==='signup'?'auth_t_signup':'auth_t_login');
+  $('#authSubmit').textContent=t(m==='signup'?'btn_signup':'btn_login');
+  $('#fPass').setAttribute('autocomplete',m==='signup'?'new-password':'current-password');
+  $('#authErr').textContent='';
+  if(authTrack)$('#fTrack').value=authTrack;
+}
+function openAuth(mode,track){
+  if(track)authTrack=track;
+  lastFocus=document.activeElement;
+  setMode(mode);
+  $('#auth').hidden=false;
+  document.body.classList.add('lock');
+  setTimeout(()=>{const f=$(mode==='signup'?'#fName':'#fEmail');if(f)f.focus();},30);
+}
+function closeAuth(){
+  $('#auth').hidden=true;
+  document.body.classList.remove('lock');
+  $('#fPass').value='';
+  if(lastFocus&&lastFocus.focus)lastFocus.focus();
+}
+$('#authForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(cloud){cloudAuth();return;}
+  const err=$('#authErr');err.textContent='';
+  const email=$('#fEmail').value.trim().toLowerCase(),pass=$('#fPass').value;
+  const U=users();
+  if(authMode==='signup'){
+    const name=$('#fName').value.trim();
+    if(!name){err.textContent=t('e_name');return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=t('e_email');return;}
+    if(pass.length<6){err.textContent=t('e_pass');return;}
+    if(U[email]){err.textContent=t('e_exists');return;}
+    const h=await hash(email,pass);
+    me={profile:{name:name,email:email,track:$('#fTrack').value,exam:''},hash:h,done:{},log:{},tasks:[],notes:''};
+    U[email]=me;store.set('ns_users',U);store.set('ns_session',email);
+    closeAuth();showView('dash');toast(t('t_welcome',{n:name.split(' ')[0]}));
+  }else{
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=t('e_email');return;}
+    const u=U[email];
+    if(!u){err.textContent=t('e_bad');return;}
+    const h=await hash(email,pass);
+    if(u.hash!==h){err.textContent=t('e_bad');return;}
+    me=u;store.set('ns_session',email);
+    closeAuth();showView('dash');
+  }
+  $('#fPass').value='';
+});
+function logout(){
+  resetTimer();T.mode='focus';T.remain=T.len*60;drawTimer();
+  if(cloud)sb.auth.signOut();
+  me=null;store.set('ns_session',null);showView('home');
+}
+
+/* ---------- dashboard ---------- */
+const openSub=new Set(),seenTrack=new Set();
+function fillDash(){
+  buildTrackSelect($('#dTrack'),me.profile.track);
+  $('#dExam').value=me.profile.exam||'';
+  $('#notes').value=me.notes||'';
+  $('#savedMsg').textContent='';
+}
+function daysLeft(str){
+  if(!str)return null;
+  const p=str.split('-').map(Number);if(p.length!==3||p.some(isNaN))return null;
+  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  return Math.round((new Date(p[0],p[1]-1,p[2])-today)/864e5);
+}
+function streak(){
+  let n=0;const d=new Date();
+  if(!(me.log[dkey(d)]>0))d.setDate(d.getDate()-1);
+  while(me.log[dkey(d)]>0){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+function weekDays(){
+  const out=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);out.push({w:d.getDay(),m:me.log[dkey(d)]||0,today:i===0});}
+  return out;
+}
+function trackTotals(){
+  const tr=byId(me.profile.track);let done=0,total=0;
+  tr.sub.forEach((s,si)=>s.t.forEach((_,ti)=>{total++;if(me.done[tr.id+':'+si+':'+ti])done++;}));
+  return {done,total};
+}
+function renderStats(){
+  const wk=weekDays().reduce((a,x)=>a+x.m,0);
+  const tt=trackTotals();
+  const pct=tt.total?Math.round(tt.done/tt.total*100):0;
+  const dl=daysLeft(me.profile.exam);
+  let dv;
+  if(dl===null)dv='<span style="font-size:1.1rem">'+esc(t('exam_none'))+'</span>';
+  else if(dl<0)dv='<span style="font-size:1.4rem">'+esc(t('exam_past'))+'</span>';
+  else if(dl===0)dv='<span style="font-size:1.6rem">'+esc(t('exam_today'))+'</span>';
+  else dv=dl+'<small>'+esc(t('u_days'))+'</small>';
+  $('#stats').innerHTML=
+    '<div class="stat"><div class="l">'+esc(t('s_streak'))+'</div><div class="v">'+streak()+'<small>'+esc(t('u_days'))+'</small></div></div>'+
+    '<div class="stat"><div class="l">'+esc(t('s_week'))+'</div><div class="v">'+(wk/60).toFixed(1)+'<small>'+esc(t('u_hrs'))+'</small></div></div>'+
+    '<div class="stat"><div class="l">'+esc(t('s_syll'))+'</div><div class="v">'+pct+'<small>%</small></div></div>'+
+    '<div class="stat"><div class="l">'+esc(t('s_days'))+'</div><div class="v">'+dv+'</div></div>';
+}
+function renderTracker(focusKey){
+  const tr=byId(me.profile.track);
+  if(!seenTrack.has(tr.id)){seenTrack.add(tr.id);openSub.add(tr.id+':0');}
+  $('#trackList').innerHTML=tr.sub.map((s,si)=>{
+    let d=0;s.t.forEach((_,ti)=>{if(me.done[tr.id+':'+si+':'+ti])d++;});
+    const k=tr.id+':'+si,pct=Math.round(d/s.t.length*100);
+    return '<details class="sj" data-k="'+k+'"'+(openSub.has(k)?' open':'')+'><summary><span class="sj-n">'+esc(tn(s))+'</span><span class="sj-c">'+d+'/'+s.t.length+'</span><span class="bar"><i style="width:'+pct+'%"></i></span></summary><div class="topics">'+
+      s.t.map((x,ti)=>{const key=k+':'+ti,on=!!me.done[key];return '<label class="topic'+(on?' on':'')+'"><input type="checkbox" data-t="'+key+'"'+(on?' checked':'')+'><span>'+esc(x)+'</span></label>';}).join('')+
+      '</div></details>';
+  }).join('');
+  const tt=trackTotals(),pct=tt.total?Math.round(tt.done/tt.total*100):0;
+  $('#overallBar').style.width=pct+'%';
+  $('#overallTxt').textContent=t('tr_of',{a:tt.done,b:tt.total});
+  if(focusKey){const el=$('[data-t="'+focusKey+'"]');if(el)el.focus();}
+}
+function renderTasks(){
+  $('#taskList').innerHTML=me.tasks.length
+    ?me.tasks.map(k=>'<li class="'+(k.d?'done':'')+'"><label><input type="checkbox" data-id="'+k.id+'"'+(k.d?' checked':'')+'><span>'+esc(k.t)+'</span></label><button class="del" type="button" data-del="'+k.id+'" aria-label="'+esc(t('tk_del'))+'">×</button></li>').join('')
+    :'<li class="empty">'+esc(t('tk_empty'))+'</li>';
+}
+function fmtMin(m){return m>=60?(Math.round(m/6)/10)+'h':m+'m';}
+function renderChart(){
+  const days=weekDays();
+  const max=Math.max(60,Math.ceil(Math.max.apply(null,days.map(x=>x.m))/30)*30);
+  const W=320,H=176,Lf=36,R=8,Tp=16,B=26,ph=H-Tp-B,bw=26,gap=(W-Lf-R-7*bw)/6;
+  const y=v=>Tp+ph*(1-v/max);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(t('wk_title')+': '+days.map(x=>fmtMin(x.m)).join(', '))+'">';
+  [0,max/2,max].forEach(v=>{
+    s+='<line class="gl" x1="'+Lf+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text class="gt" x="'+(Lf-6)+'" y="'+(y(v)+4)+'" text-anchor="end">'+fmtMin(v)+'</text>';
+  });
+  days.forEach((d,i)=>{
+    const x=Lf+i*(bw+gap),h=ph*d.m/max;
+    if(d.m>0)s+='<rect class="cb'+(d.today?' today':'')+'" style="--i:'+i+'" x="'+x+'" y="'+(y(d.m))+'" width="'+bw+'" height="'+h+'" rx="4"><title>'+fmtMin(d.m)+'</title></rect><text class="gt" x="'+(x+bw/2)+'" y="'+(y(d.m)-4)+'" text-anchor="middle">'+fmtMin(d.m)+'</text>';
+    s+='<text class="gt" x="'+(x+bw/2)+'" y="'+(H-8)+'" text-anchor="middle"'+(d.today?' style="font-weight:700"':'')+'>'+esc(t('wd')[d.w])+'</text>';
+  });
+  $('#chart').innerHTML=s+'</svg>';
+}
+function renderDash(){
+  if(!me)return;
+  $('#dHello').textContent=t('hello',{n:me.profile.name.split(' ')[0]});
+  renderStats();renderTracker();renderTasks();renderChart();
+}
+function addMinutes(m){
+  if(!me)return;
+  const k=dkey(new Date());me.log[k]=(me.log[k]||0)+m;persist.log(k);
+  renderStats();renderChart();
+}
+
+/* ---------- focus timer ---------- */
+const T={mode:'focus',len:25,remain:25*60,running:false,end:0,iv:null};
+const CIRC=540.35;
+function totalSecs(){return (T.mode==='focus'?T.len:5)*60;}
+function drawTimer(){
+  const m=Math.floor(T.remain/60),s=T.remain%60;
+  $('#tmTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  $('#ringP').setAttribute('stroke-dashoffset',String(CIRC*(T.remain/totalSecs())));
+  $('#timerCard').classList.toggle('brk',T.mode==='break');
+  $('#tmMode').textContent=t(T.mode==='focus'?'tm_focus':'tm_break');
+  $('#tmGo').textContent=t(T.running?'tm_pause':'tm_start');
+  $('#tmLen').disabled=T.running;
+}
+function tick(){
+  T.remain=Math.max(0,Math.round((T.end-Date.now())/1000));
+  drawTimer();
+  if(T.remain<=0)finishTimer();
+}
+function startPause(){
+  if(T.running){T.running=false;clearInterval(T.iv);}
+  else{T.running=true;T.end=Date.now()+T.remain*1000;T.iv=setInterval(tick,250);}
+  drawTimer();
+}
+function finishTimer(){
+  clearInterval(T.iv);T.running=false;
+  if(T.mode==='focus'){addMinutes(T.len);toast(t('t_done',{m:T.len}));T.mode='break';T.remain=5*60;}
+  else{toast(t('t_break'));T.mode='focus';T.remain=T.len*60;}
+  drawTimer();
+}
+function resetTimer(){clearInterval(T.iv);T.running=false;T.remain=totalSecs();drawTimer();}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const goEl=e.target.closest('[data-go]');
+  if(goEl){e.preventDefault();go(goEl.dataset.go);return;}
+  const act=e.target.closest('[data-act]');
+  if(act){
+    const a=act.dataset.act;
+    if(a==='signup')openAuth('signup');
+    else if(a==='login')openAuth('login');
+    else if(a==='logout')logout();
+    return;
+  }
+  const g=e.target.closest('[data-g]');
+  if(g){exGroup=g.dataset.g;renderExplorer();return;}
+  const tr=e.target.closest('[data-tr]');
+  if(tr){exTrack=tr.dataset.tr;renderExplorer();return;}
+  const del=e.target.closest('[data-del]');
+  if(del&&me){me.tasks=me.tasks.filter(k=>String(k.id)!==del.dataset.del);persist.taskDel(del.dataset.del);renderTasks();return;}
+  const md=e.target.closest('[data-mode]');
+  if(md){setMode(md.dataset.mode);return;}
+});
+$('#exCta').addEventListener('click',()=>startTrack(exTrack));
+$('#authClose').addEventListener('click',closeAuth);
+$('#auth').addEventListener('click',e=>{if(e.target.id==='auth')closeAuth();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#auth').hidden)closeAuth();});
+$('#langBtn').addEventListener('click',()=>{lang=lang==='en'?'hi':'en';store.set('ns_lang',lang);applyLang();});
+function effDark(){
+  const d=document.documentElement.dataset.theme;
+  if(d)return d==='dark';
+  return window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches;
+}
+$('#themeBtn').addEventListener('click',()=>{const nx=effDark()?'light':'dark';document.documentElement.dataset.theme=nx;store.set('ns_theme',nx);});
+
+$('#dTrack').addEventListener('change',e=>{me.profile.track=e.target.value;persist.profile();renderDash();});
+$('#dExam').addEventListener('change',e=>{me.profile.exam=e.target.value;persist.profile();renderStats();});
+$('#trackList').addEventListener('change',e=>{
+  const k=e.target.dataset&&e.target.dataset.t;
+  if(!k||!me)return;
+  if(e.target.checked)me.done[k]=true;else delete me.done[k];
+  persist.done(k,e.target.checked);renderTracker(k);renderStats();
+});
+$('#trackList').addEventListener('toggle',e=>{
+  const k=e.target.dataset&&e.target.dataset.k;if(!k)return;
+  if(e.target.open)openSub.add(k);else openSub.delete(k);
+},true);
+$('#taskForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const v=$('#taskIn').value.trim();if(!v||!me)return;
+  $('#taskIn').value='';await persist.taskAdd(v);renderTasks();
+});
+$('#taskList').addEventListener('change',e=>{
+  const id=e.target.dataset&&e.target.dataset.id;if(!id||!me)return;
+  const k=me.tasks.find(x=>String(x.id)===id);if(k){k.d=e.target.checked;persist.taskDone(k);renderTasks();}
+});
+$('#logForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=parseInt($('#logMin').value,10);
+  if(!v||v<1||v>600||!me)return;
+  addMinutes(v);toast(t('t_logged',{m:v}));$('#logMin').value='';
+});
+let noteT;
+$('#notes').addEventListener('input',e=>{
+  clearTimeout(noteT);
+  noteT=setTimeout(()=>{if(!me)return;me.notes=e.target.value;persist.notes();$('#savedMsg').textContent=t('nt_saved');},450);
+});
+$('#tmGo').addEventListener('click',startPause);
+$('#tmReset').addEventListener('click',resetTimer);
+$('#tmLen').addEventListener('change',e=>{
+  T.len=parseInt(e.target.value,10)||25;
+  if(!T.running&&T.mode==='focus'){T.remain=T.len*60;drawTimer();}
+});
+
+/* ---------- start ---------- */
+const th=store.get('ns_theme',null);
+if(th==='dark'||th==='light')document.documentElement.dataset.theme=th;
+renderTicker();
+const sess=cloud?null:store.get('ns_session',null);
+if(sess){const u=users()[sess];if(u)me=u;}
+applyLang();
+if(me)showView('dash');
+if(cloud){
+  sb.auth.getSession().then(async r=>{
+    const s=r.data&&r.data.session;
+    if(s){try{await enterCloud(s.user);showView('dash');}catch(e){fail();}}
+  });
+}
+})();
+</script>
+
+</body>
+</html>
